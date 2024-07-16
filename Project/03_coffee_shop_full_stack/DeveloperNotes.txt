@@ -1,0 +1,14 @@
+BACKEND::
+
+cd "C:\ReSkill\Python\cd0039-Identity-and-Access-Management\Project\03_coffee_shop_full_stack"
+
+python -m virtualenv envCoffeeShop
+
+cd envCoffeeShop\Scripts
+
+activate.bat
+
+cd "C:\ReSkill\Python\cd0039-Identity-and-Access-Management\Project\03_coffee_shop_full_stack\starter_code\backend"
+
+upgrades all installed moduels
+pip3 install -U -r requirements.txt
