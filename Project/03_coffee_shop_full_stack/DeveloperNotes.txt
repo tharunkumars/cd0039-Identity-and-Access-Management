@@ -8,11 +8,16 @@ cd envCoffeeShop\Scripts
 
 activate.bat
 
+C:\Users\tharunkumars\Desktop\CoffeeShop.bat
+
 cd "C:\ReSkill\Python\cd0039-Identity-and-Access-Management\Project\03_coffee_shop_full_stack\starter_code\backend\src"
 
 set FLASK_APP=api.py
 
 flask run --reload
+
+
+
 
 upgrades all installed moduels
 pip3 install -U -r requirements.txt
@@ -23,3 +28,7 @@ FRONTEND ::
 cd C:\ReSkill\Python\cd0039-Identity-and-Access-Management\Project\03_coffee_shop_full_stack\starter_code\frontend\src
 
 set NODE_OPTIONS=--openssl-legacy-provider
+
+ionic serve
+
+C:\Users\tharunkumars\Desktop\FECoffeeShop.bat

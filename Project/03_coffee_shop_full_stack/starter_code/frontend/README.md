@@ -39,6 +39,17 @@ npm install
 npm uninstall node-sass
 npm install node-sass@4.14.1
 ```
+
+npm uninstall -g node-sass   #removes global package
+npm list node-sass
+npm install node-sass@4.14.1
+npm list node-sass
+
+npm info node-sass
+
+npm update node-sass
+
+
 > _tip_: **npm i** is shorthand for **npm install**
 
 > _note_: If you encounter an error related to python2 while installing dependencies, you might need to install Python  Use the following command if necessary:
