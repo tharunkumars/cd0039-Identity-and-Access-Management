@@ -32,3 +32,8 @@ set NODE_OPTIONS=--openssl-legacy-provider
 ionic serve
 
 C:\Users\tharunkumars\Desktop\FECoffeeShop.bat
+
+
+@@@@@ Implementing Auth0 2.5 Section 
+
+next step to create an account in Auth0 website with all the required params
