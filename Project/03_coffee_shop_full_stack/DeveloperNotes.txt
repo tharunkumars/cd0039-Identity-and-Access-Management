@@ -1,3 +1,147 @@
+Learning Notes
+
+Common Third party authentication in the market
+
+Auth0
+AWS Congnito
+Firebase
+Okta
+
+Auth0 implementation on our Own:
+
+ We first sign up with the Auth0 website.
+     This is for both the customers to land on the hosted web page
+     Also for the API to validate the received JWT
+Create  the tenant domain, (which is attractive for the customers)
+ Tenat Created " dev-tzsxcxu33dax7vx7" 
+App Created FSNDAPI
+dev domain dev-tzsxcxu33dax7vx7.us.auth0.com
+Client ID wnR63ZzNFtMt2r9hlck9S8ZnoLe8Dv54
+Client Secret zxXAOgsFK3bUbZCW4I6dAXLCzSFe_WYLFtuB4HfiKsW4Kj6gNK6nNg4tvkIK3JIr
+post method used to submit token end points
+GET https://dev-tzsxcxu33dax7vx7.us.auth0.com/authorize?audience=fsndapi&response_type=token&client_id=wnR63ZzNFtMt2r9hlck9S8ZnoLe8Dv54&redirect_uri=https://localhost:8080/loginResults
+OAuth username/pwd tharunkumars@gmail.com/$Fsndpwd07
+
+::: Storing Tokens in Web Browsers ::: 
+
+  Local Store is an interface provided by most browser to persist data , 
+  this is accessible via an interface of JavaScript. 
+  This is usually a set of String Key value pair.
+  2 important properties of Local stores
+              It is domain specific, accessible only by that domain. that is opened in multiple tabs in the browser.
+              Not accessible by other domains
+              the values are persistant.
+              That store is cross browser compatible
+              jwt = response.jwt
+      localStorage.setItem("token", jwt) 
+      jwt = localStorage.getItem("token")  
+
+There are inherent risks associated with using local storage. 
+For example, a malicious attack can inject foreign code into a website to 
+execute on that website to access all of the keys within the local store and 
+drops it into the malicious server.
+
+:::  How Cross-Site Scripting Attacks (XSS) are Performed and Mitigated Techniques ::: 
+
+Point 1 :   Things to note when using the JWTs
+            Payload should not contain Sensitive Data
+            We should be easily able to Change the Private Key (secret) or Public key in case we come to know a breach has happened
+            JWT should expire frequently ( recommended in minutes)
+            Include methods to automatically refresh tokens.
+                  
+          Cookies have similar properties like JWTs, they are perisistent and domain only accessible.
+           Additionally they have a special property which secures it from being accessed by JavaScripts (even our own Client JS code) using the  HttpOnly Flag
+           The HttpOnly flag is typically set in the Set-Cookie header sent by the web server when a cookie is created.
+          It's added as an attribute to the cookie: Set-Cookie: sessionID=1234567890; HttpOnly
+
+Point 2: Input Sanitation.
+ To clarify this concept, imagine a user submits HTML as part of their name in a form.
+ When you later pull this information from your database and insert it into the HTML template for the website,
+ the browser engine will render this text on the page.
+ However, if the text contains HTML like <b>Gabe</b> this would be interpreted in the browser as HTML and render as Gabe.
+ This becomes a problem if malicious code, such as javascript, is saved in place of a valid string.
+ In other words, this malicious text will be interpreted by the browser as code and executed on the client.
+ Input Sanitation transforms characters like < to &lt;
+ which will not be interpreted as code and print as text (<).
+ This step should always be performed on the server to prevent someone from sending the malicious text
+ directly to your server using curl(opens in a new tab) or Postman(opens in a new tab).
+
+Point3 :  Trustable Libraries
+
+ NPM or Node Package Manager
+ is an online database of publicly submitted libraries you can use in your javascript projects.
+ Care should be taken libraries from known sources are taken up.
+
+
+::: Sending Tokens with Requests :::
+
+  Accessing Authorization Headers in Flask 
+ 
+ 
+ Sample Code
+ 
+ def headers():
+    auth_header = request.headers['Authorization']
+     ## get the token
+    header_parts = auth_header.split(' ')[1]
+    print(header_parts)	
+
+
+def get_token_auth_header():
+	## check if authorization is not in request
+		if 'Authorization' not in request.headers:
+			abort(401)
+	## get the token   
+		auth_header = request.headers['Authorization']
+		header_parts = auth_header.split(' ')
+	## check if token is valid
+		if len(header_parts) != 2:
+			abort(401)
+		elif header_parts[0].lower() != 'bearer':
+			abort(401) 
+	return header_parts[1]
+
+	app = FLASK(__name__)
+
+	@app.route('/headers')
+	def headers():
+		jwt = get_token_auth_header()
+		print(jwt)
+		return "not implemented"
+	
+To make it as a decorator, you can use the following code.	
+		
+    from functools import wraps
+    def requires_auth(f):
+        @wraps(f)
+        def wrapper(*args,* *kwargs):
+            jwt = get_token_auth_header()
+            return f(jwt, *args,* *kwargs)
+        return wrapper
+
+    @app.route('/headers')
+    @requires_auth
+    def headers(jwt):
+        print(jwt)
+        return "not implemented"
+
+::: Section 2.12 Code :::
+
+    from flask import Flask, request
+
+    app = Flask(__name__)
+
+    @app.route('/headers')
+    def headers():
+        # @TODO unpack the request header
+        auth_header = request.headers['Authorization']
+        header_parts = auth_header.split(' ')
+        print("Bearer part 0", header_parts[0])
+        print("Secret", header_parts[1])
+        return 'not implemented'
+
+
+
 BACKEND::
 
 cd "C:\ReSkill\Python\cd0039-Identity-and-Access-Management\Project\03_coffee_shop_full_stack"
@@ -37,3 +181,6 @@ C:\Users\tharunkumars\Desktop\FECoffeeShop.bat
 @@@@@ Implementing Auth0 2.5 Section 
 
 next step to create an account in Auth0 website with all the required params
+
+
+
